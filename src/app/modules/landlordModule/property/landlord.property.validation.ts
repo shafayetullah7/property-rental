@@ -1,11 +1,12 @@
+import { query } from "express";
+import { Types } from "mongoose";
 import { z } from "zod";
 
 const createPropertyData = z.object({
-  propertyImages: z.array(z.string()).min(10),
   propertyName: z.string(),
   propertyPrice: z.number(),
-  propertyUploadingDate: z.date(),
-  lastStatusUpdatingDate: z.date(),
+  propertyUploadingDate: z.string().datetime(),
+  lastStatusUpdatingDate: z.string().datetime(),
   propertyStatus: z.enum(["Available", "Rented"]),
   propertyType: z.enum(["Flat", "House"]),
   propertyID: z.string(),
@@ -18,16 +19,16 @@ const createPropertyData = z.object({
     longitude: z.number().min(-180).max(180),
     latitude: z.number().min(-90).max(90),
   }),
+  propertyImages: z.array(z.string()).min(10),
   propertyDocuments: z.string(),
 });
 
 const updatePropertyData = z
   .object({
-    propertyImages: z.array(z.string()).min(10),
     propertyName: z.string(),
     propertyPrice: z.number(),
-    propertyUploadingDate: z.date(),
-    lastStatusUpdatingDate: z.date(),
+    propertyUploadingDate: z.string().datetime(),
+    lastStatusUpdatingDate: z.string().datetime(),
     propertyStatus: z.enum(["Available", "Rented"]),
     propertyType: z.enum(["Flat", "House"]),
     propertyID: z.string(),
@@ -40,24 +41,52 @@ const updatePropertyData = z
       longitude: z.number().min(-180).max(180),
       latitude: z.number().min(-90).max(90),
     }),
+    propertyImages: z.array(z.string()).min(10),
     propertyDocuments: z.string(),
   })
   .partial();
 
-const createPropertySchema = {
-  body: createPropertyData,
-};
+const getPropertyQuery = z
+  .object({
+    propertyType: z.enum(["Flat", "House"]).optional(),
+    propertyStatus: z.enum(["Available", "Rented"]).optional(),
+    minPrice: z.number().min(0).optional(),
+    maxPrice: z.number().min(0).optional(),
+    _id: z.string().uuid().optional(),
+    sortBy: z
+      .enum([
+        "propertyPrice",
+        "bedrooms",
+        "bathrooms",
+        "area",
+        "createdAt",
+        "updatedAt",
+      ])
+      .optional(), // Field to sort by
+    sortOrder: z.enum(["asc", "desc"]).optional(), // Sorting order
+  })
+  .partial();
 
-const updatePropertySchema = {
+const getPropertyQuerySchema = z.object({
+  query: getPropertyQuery,
+});
+
+const createPropertySchema = z.object({
+  body: createPropertyData,
+});
+
+const updatePropertySchema = z.object({
   body: updatePropertyData,
-};
+});
 
 export const landLordPropertyDtoSchema = {
   createPropertyData,
   updatePropertyData,
+  getPropertyQuery,
 };
 
 export const landlordPropertyValidation = {
   createPropertySchema,
   updatePropertySchema,
+  getPropertyQuerySchema,
 };

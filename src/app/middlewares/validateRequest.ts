@@ -7,18 +7,25 @@ import httpStatus from "http-status";
 const validateRequest = (schema: AnyZodObject) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { body, query, params } = schema.parse({
-      body: req.body,
-      query: req.query,
-      params: req.params,
+      body: req.body || {},
+      query: req.query || {},
+      params: req.params || {},
     });
 
-    console.log("Validated body:", body);
-    // console.log("Validated query:", query);
-    // console.log("Validated params:", params);
+    console.log("Validated body:", req.body);
+    console.log("Validated query:", query);
+    console.log("Validated params:", params);
 
-    const extraBodyFields = getExtraFields(req.body, body);
-    const extraQueryFields = getExtraFields(req.query, query);
-    const extraParamsFields = getExtraFields(req.params, params);
+    const extraBodyFields =
+      body && Object.keys(body).length ? getExtraFields(req.body, body) : [];
+    const extraQueryFields =
+      query && Object.keys(query).length
+        ? getExtraFields(req.query, query)
+        : [];
+    const extraParamsFields =
+      params && Object.keys(params).length
+        ? getExtraFields(req.params, params)
+        : [];
 
     if (
       extraBodyFields.length ||

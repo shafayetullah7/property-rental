@@ -8,3 +8,7 @@ export type CreatePropertyDto = z.infer<
 export type UpdatePropertyDto = z.infer<
   typeof landLordPropertyDtoSchema.updatePropertyData
 >;
+
+export type GetPropertyQueryDto = z.infer<
+  typeof landLordPropertyDtoSchema.getPropertyQuery
+>;

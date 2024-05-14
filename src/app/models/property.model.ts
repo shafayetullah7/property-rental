@@ -21,6 +21,8 @@ interface IProperty extends Document {
   owner: Types.ObjectId; // Reference to Landlord
   createdAt: Date;
   updatedAt: Date;
+  propertyImages?: string[]; // Array of image URLs
+  propertyDocuments: string; // URL or path to documents
 }
 
 // Define Mongoose schema for Property
@@ -88,9 +90,16 @@ const propertySchema = new Schema<IProperty>(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'Landlord', // Reference to Landlord model
-      required: true
-    }
+      ref: "Landlord", // Reference to Landlord model
+      required: true,
+    },
+    propertyImages: {
+      type: [String],
+    },
+    propertyDocuments: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true, // Automatically add createdAt and updatedAt fields
