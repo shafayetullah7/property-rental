@@ -22,4 +22,11 @@ landlordPropertyRouter.get(
   landlordPropertyController.getLandlordProperties
 );
 
+landlordPropertyRouter.patch(
+  "/:propertyId",
+  authorize("landLord"),
+  validateRequest(landlordPropertyValidation.updatePropertySchema),
+  landlordPropertyController.updateLandlordProperties
+);
+
 export default landlordPropertyRouter;

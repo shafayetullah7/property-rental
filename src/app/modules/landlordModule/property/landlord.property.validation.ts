@@ -77,6 +77,9 @@ const createPropertySchema = z.object({
 
 const updatePropertySchema = z.object({
   body: updatePropertyData,
+  params: z.object({
+    propertyId: z.string(),
+  }),
 });
 
 export const landLordPropertyDtoSchema = {

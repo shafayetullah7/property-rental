@@ -23,6 +23,7 @@ interface IProperty extends Document {
   updatedAt: Date;
   propertyImages?: string[]; // Array of image URLs
   propertyDocuments: string; // URL or path to documents
+  isVerified: boolean;
 }
 
 // Define Mongoose schema for Property
@@ -99,6 +100,10 @@ const propertySchema = new Schema<IProperty>(
     propertyDocuments: {
       type: String,
       required: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   {

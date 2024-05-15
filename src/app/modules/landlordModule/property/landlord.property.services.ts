@@ -7,6 +7,7 @@ import {
   GetPropertyQueryDto,
 } from "./landlord.property.dto";
 import { Schema } from "mongoose";
+import { UpdateLandlordDto } from "../account/landlord.account.dto";
 
 const createLandlordPropertyInDB = async (
   userId: string,
@@ -61,15 +62,41 @@ const getLandLordPropertiesFromDB = async (
   }
 
   return await properties.exec();
+};
 
-  // const properties = await Property.find({
-  //   owner: new Schema.ObjectId(userId),
-  // });
+const updateLandlordPropertyInDB = async (
+  userId: string,
+  propertyId: string,
+  payload: UpdateLandlordDto
+) => {
+  const user = await Landlord.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  }
 
-  // return properties;
+  if (!Object.keys(payload).length) {
+    throw new AppError(httpStatus.BAD_REQUEST, "No data provided to update.");
+  }
+
+  const property = await Property.findById(propertyId);
+
+  // console.log(property);
+
+  if (!property) {
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found.");
+  }
+
+  const result = await Property.findByIdAndUpdate(propertyId, payload, {
+    new: true,
+  });
+
+  console.log(result);
+
+  return result;
 };
 
 export const landlordPropertyServices = {
   createLandlordPropertyInDB,
   getLandLordPropertiesFromDB,
+  updateLandlordPropertyInDB,
 };

@@ -13,15 +13,13 @@ import { comparePassword, hashPassword } from "../../../utils/managePassword";
 const createLandLordAccountInDB = async (payload: CreateLandlordDto) => {
   const existingAccount = await Landlord.findOne({ email: payload.email });
 
-  payload.password = await hashPassword(payload.password);
-
   if (existingAccount) {
     throw new AppError(
       httpStatus.CONFLICT,
       "Already have an account with the email."
     );
   }
-
+  payload.password = await hashPassword(payload.password);
   const newAccount = await Landlord.create(payload);
 
   if (!newAccount) {
