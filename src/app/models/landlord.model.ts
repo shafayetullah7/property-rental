@@ -50,7 +50,7 @@ const landlordSchema = new Schema<ILandlord>(
     },
 
     dateOfBirth: {
-      type: Date,
+      type: String,
     },
     nationality: {
       type: String,

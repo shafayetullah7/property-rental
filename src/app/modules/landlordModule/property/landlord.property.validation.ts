@@ -48,22 +48,30 @@ const updatePropertyData = z
 
 const getPropertyQuery = z
   .object({
-    propertyType: z.enum(["Flat", "House"]).optional(),
-    propertyStatus: z.enum(["Available", "Rented"]).optional(),
-    minPrice: z.number().min(0).optional(),
-    maxPrice: z.number().min(0).optional(),
-    _id: z.string().uuid().optional(),
-    sortBy: z
-      .enum([
-        "propertyPrice",
-        "bedrooms",
-        "bathrooms",
-        "area",
-        "createdAt",
-        "updatedAt",
-      ])
-      .optional(), // Field to sort by
-    sortOrder: z.enum(["asc", "desc"]).optional(), // Sorting order
+    propertyType: z.enum(["Flat", "House"]),
+    propertyStatus: z.enum(["Available", "Rented"]),
+    minPrice: z
+      .string()
+      .transform((val) => Number(val) || 0)
+      .refine((val) => val >= 0, "minimum price cannot be less than 0."),
+    maxPrice: z
+      .string()
+      .transform((val) => Number(val) || 0)
+      .refine((val) => val >= 0, "maximum price cannot be less than 0."),
+    _id: z.string(),
+    sortBy: z.enum([
+      "propertyPrice",
+      "bedrooms",
+      "bathrooms",
+      "area",
+      "createdAt",
+      "updatedAt",
+    ]), // Field to sort by
+    sortOrder: z.enum(["asc", "desc"]), // Sorting order
+    isVerified: z.enum(["true", "false"]).transform((val) => {
+      if (val === "true") return true;
+      else if (val === "false") return false;
+    }),
   })
   .partial();
 

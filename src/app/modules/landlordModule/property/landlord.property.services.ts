@@ -28,39 +28,44 @@ const createLandlordPropertyInDB = async (
 
 const getLandLordPropertiesFromDB = async (
   userId: string,
-  query: GetPropertyQueryDto
+  query: GetPropertyQueryDto = {}
 ) => {
   const user = await Landlord.findById(userId);
   if (!userId) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found.");
   }
 
-  const queryOj: any = {};
+  const queryObj: any = {};
 
   if (query.minPrice) {
-    queryOj.propertyPrice = { $gte: query.minPrice };
+    queryObj.propertyPrice = { $gte: query.minPrice };
   }
   if (query.maxPrice) {
-    queryOj.propertyPrice = {
-      ...queryOj.propertyPrice,
+    queryObj.propertyPrice = {
+      ...queryObj.propertyPrice,
       $lte: query.maxPrice,
     };
   }
   if (query._id) {
-    queryOj._id = query._id;
+    queryObj._id = query._id;
+  }
+  if (query.isVerified) {
+    queryObj.isVerified = true;
+  } else if (query.isVerified) {
+    queryObj.isVerified = false;
   }
 
-  queryOj.owner = new Schema.ObjectId(userId);
+  // queryObj[query.sortBy || "createdAt"] = query.sortOrder === "asc" ? 1 : -1;
+
+  const sortBy = query.sortBy ? query.sortBy : "createdAt";
+  const sortOrder = query.sortOrder === "asc" ? 1 : -1;
+
+  queryObj.owner = userId;
 
   // Perform the query
-  let properties = Property.find(query);
+  let properties = Property.find(queryObj);
 
-  // Sort by the specified field if sortBy parameter is provided
-  if (query.sortBy && query.sortOrder) {
-    const sortOrder = query.sortOrder === "desc" ? -1 : 1;
-    properties = properties.sort({ [query.sortBy]: sortOrder });
-  }
-
+  properties = properties.sort({ [sortBy]: sortOrder });
   return await properties.exec();
 };
 
