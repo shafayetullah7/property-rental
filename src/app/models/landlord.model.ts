@@ -10,7 +10,7 @@ interface ILandlord extends Document {
   officeNumber?: string;
   email: string;
   password: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   nationality?: string;
   nidImage?: string;
   verified: boolean;
