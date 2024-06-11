@@ -46,7 +46,7 @@ const loginAdminInDB = async (payload: LoginAdminDto) => {
   const admin = await Admin.findOne({ email });
 
   if (!admin) {
-    throw new AppError(httpStatus.CONFLICT, "User not found.");
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
   }
 
   const passMatch = await comparePassword(password, admin.password);

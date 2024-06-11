@@ -42,7 +42,7 @@ const loginLandlordInSystem = async (payload: LoginLandlordDto) => {
   const existingAccount = await Landlord.findOne({ email: payload.email });
 
   if (!existingAccount) {
-    throw new AppError(httpStatus.CONFLICT, "Land-lord account not found.");
+    throw new AppError(httpStatus.NOT_FOUND, "Land-lord account not found.");
   }
   const passMatch = await comparePassword(
     payload.password,
