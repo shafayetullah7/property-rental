@@ -23,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", router);
-app.use("/api/v1", testRouter);
+app.use("/api/v2", testRouter);
 // admin
 // app.use("/api/v1/admin/account/", adminAccountRouter);
 // app.use("/api/v1/admin/properties/", adminPropertiesRouter);
