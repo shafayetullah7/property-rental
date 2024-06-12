@@ -5,6 +5,7 @@ import helmet from "helmet";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import apiNotFound from "./app/middlewares/apiNotFound";
 import router from "./app/router";
+import testRouter from "./app/modules/test/test";
 // import adminAccountRouter from "./app/modules/admin/account/admin.account.route";
 // import adminPropertiesRouter from "./app/modules/admin/properties/admin.properties.route";
 // import landlordPropertyRouter from "./app/modules/landlordModule/property/landlord.property.route";
@@ -22,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", router);
-
+app.use("/api/v1", testRouter);
 // admin
 // app.use("/api/v1/admin/account/", adminAccountRouter);
 // app.use("/api/v1/admin/properties/", adminPropertiesRouter);
