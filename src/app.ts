@@ -24,12 +24,12 @@ app.get("/", (req: Request, res: Response) => {
 // app.use("/api/v1", router);
 
 // admin
-router.use("/api/v1/admin/account", adminAccountRouter);
-router.use("/api/v1/admin/properties", adminPropertiesRouter);
+app.use("/api/v1/admin/account", adminAccountRouter);
+app.use("/api/v1/admin/properties", adminPropertiesRouter);
 
 // landlord
-router.use("/api/v1/landlord", landlordAccountRouter);
-router.use("/api/v1/landlord/properties", landlordPropertyRouter);
+app.use("/api/v1/landlord", landlordAccountRouter);
+app.use("/api/v1/landlord/properties", landlordPropertyRouter);
 
 // Handle errors
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
