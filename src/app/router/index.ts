@@ -11,7 +11,8 @@ router.use("/admin/account", adminAccountRouter);
 router.use("/admin/properties", adminPropertiesRouter);
 
 // landlord
-router.use("/landlord", landlordAccountRouter);
 router.use("/landlord/properties", landlordPropertyRouter);
+router.use("/landlord/account", landlordAccountRouter);
+
 
 export default router;
