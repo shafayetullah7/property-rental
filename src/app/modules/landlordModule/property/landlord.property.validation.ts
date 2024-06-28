@@ -19,6 +19,7 @@ const createPropertyData = z.object({
     longitude: z.number().min(-180).max(180),
     latitude: z.number().min(-90).max(90),
   }),
+  locationUrl: z.string(),
   propertyImages: z.array(z.string()).min(10),
   propertyDocuments: z.string(),
 });
@@ -41,6 +42,8 @@ const updatePropertyData = z
       longitude: z.number().min(-180).max(180),
       latitude: z.number().min(-90).max(90),
     }),
+    locationUrl: z.string(),
+
     propertyImages: z.array(z.string()).min(10),
     propertyDocuments: z.string(),
   })
@@ -75,6 +78,14 @@ const getPropertyQuery = z
   })
   .partial();
 
+const meetingApprovalData = z.object({
+  meetingApproval: z.enum(["accepted", "rejected", "pending"]),
+});
+
+const rentApprovalData = z.object({
+  status: z.enum(["accepted", "rejected"]),
+});
+
 const getPropertyQuerySchema = z.object({
   query: getPropertyQuery,
 });
@@ -90,14 +101,39 @@ const updatePropertySchema = z.object({
   }),
 });
 
+const approveScheduleSchema = z.object({
+  body: meetingApprovalData,
+  params: z.object({
+    wishId: z.string(),
+  }),
+});
+
+const approveRentSchema = z.object({
+  body: rentApprovalData,
+  params: z.object({
+    wishId: z.string(),
+  }),
+});
+
+const getSinglePropertySchema = z.object({
+  params: z.object({
+    id: z.string(),
+  }),
+});
+
 export const landLordPropertyDtoSchema = {
   createPropertyData,
   updatePropertyData,
   getPropertyQuery,
+  meetingApprovalData,
+  rentApprovalData,
 };
 
 export const landlordPropertyValidation = {
   createPropertySchema,
   updatePropertySchema,
   getPropertyQuerySchema,
+  getSinglePropertySchema,
+  approveScheduleSchema,
+  approveRentSchema,
 };

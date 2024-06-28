@@ -22,11 +22,39 @@ landlordPropertyRouter.get(
   landlordPropertyController.getLandlordProperties
 );
 
+landlordPropertyRouter.get(
+  "/:id",
+  authorize("landLord"),
+  validateRequest(landlordPropertyValidation.getSinglePropertySchema),
+  landlordPropertyController.getSingleLandlordProperties
+);
+
+landlordPropertyRouter.patch(
+  "/schedule/:wishId",
+  authorize("landLord"),
+  validateRequest(landlordPropertyValidation.approveScheduleSchema),
+  landlordPropertyController.approveMeeting
+);
+
+landlordPropertyRouter.patch(
+  "/approval/:wishId",
+  authorize("landLord"),
+  validateRequest(landlordPropertyValidation.approveRentSchema),
+  landlordPropertyController.approveRent
+);
+
 landlordPropertyRouter.patch(
   "/:propertyId",
   authorize("landLord"),
   validateRequest(landlordPropertyValidation.updatePropertySchema),
   landlordPropertyController.updateLandlordProperties
+);
+
+landlordPropertyRouter.get(
+  "/:id",
+  authorize("landLord"),
+  validateRequest(landlordPropertyValidation.getSinglePropertySchema),
+  landlordPropertyController.getSingleLandlordProperties
 );
 
 export default landlordPropertyRouter;

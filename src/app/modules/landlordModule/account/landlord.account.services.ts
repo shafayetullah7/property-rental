@@ -97,10 +97,6 @@ const updateLandlordInDB = async (
     throw new AppError(httpStatus.NOT_FOUND, "User not found.");
   }
 
-  if (!Object.keys(payload).length) {
-    throw new AppError(httpStatus.BAD_REQUEST, "No data provided to update.");
-  }
-
   const updatedUser = await Landlord.findOneAndUpdate({ email }, payload, {
     new: true,
     runValidators: true,
@@ -109,9 +105,18 @@ const updateLandlordInDB = async (
   return updatedUser;
 };
 
+const getLandlordAccountFromDB = async (userId: string) => {
+  const user = await Landlord.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  return user;
+};
+
 export const landlordAccountServices = {
   createLandLordAccountInDB,
   loginLandlordInSystem,
   verifyLandlordInDB,
   updateLandlordInDB,
+  getLandlordAccountFromDB,
 };

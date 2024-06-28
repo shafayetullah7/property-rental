@@ -13,6 +13,7 @@ const validateRequest = (schema: AnyZodObject) => {
     });
 
     console.log("Validated body:", req.body);
+    console.log(body);
     console.log("Validated query:", query);
     console.log("Validated params:", params);
 

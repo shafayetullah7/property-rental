@@ -2,6 +2,7 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 
 // Define interface for Property document
 interface IProperty extends Document {
+  _id: Types.ObjectId;
   propertyName: string;
   propertyPrice: number;
   propertyUploadingDate: Date;
@@ -18,6 +19,7 @@ interface IProperty extends Document {
     longitude: number;
     latitude: number;
   };
+  locationUrl: string;
   owner: Types.ObjectId; // Reference to Landlord
   createdAt: Date;
   updatedAt: Date;
@@ -32,62 +34,75 @@ const propertySchema = new Schema<IProperty>(
     propertyName: {
       type: String,
       required: true,
+      default: null,
     },
     propertyPrice: {
       type: Number,
       required: true,
+      default: null,
     },
     propertyUploadingDate: {
       type: Date,
       required: true,
+      default: null,
     },
     lastStatusUpdatingDate: {
       type: Date,
       required: true,
+      default: null,
     },
     propertyStatus: {
       type: String,
       enum: ["Available", "Rented"],
       required: true,
+      default: "Available",
     },
     propertyType: {
       type: String,
       enum: ["Flat", "House"],
       required: true,
-    },
-    propertyID: {
-      type: String,
-      required: true,
+      default: null,
     },
     bedrooms: {
       type: Number,
       required: true,
+      default: null,
     },
     bathrooms: {
       type: Number,
       required: true,
+      default: null,
     },
     area: {
       type: Number,
       required: true,
+      default: null,
     },
     propertyBio: {
       type: String,
       required: true,
+      default: null,
     },
     propertyVideo: {
       type: String,
       required: true,
+      default: null,
     },
     propertyLocation: {
       longitude: {
         type: Number,
         required: true,
+        default: null,
       },
       latitude: {
         type: Number,
         required: true,
+        default: null,
       },
+    },
+    locationUrl: {
+      type: String,
+      default: null,
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -96,10 +111,12 @@ const propertySchema = new Schema<IProperty>(
     },
     propertyImages: {
       type: [String],
+      default: null,
     },
     propertyDocuments: {
       type: String,
       required: true,
+      default: null,
     },
     isVerified: {
       type: Boolean,

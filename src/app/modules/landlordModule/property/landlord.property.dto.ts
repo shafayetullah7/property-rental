@@ -12,3 +12,11 @@ export type UpdatePropertyDto = z.infer<
 export type GetPropertyQueryDto = z.infer<
   typeof landLordPropertyDtoSchema.getPropertyQuery
 >;
+
+export type MeetingApprovalDto = z.infer<
+  typeof landLordPropertyDtoSchema.meetingApprovalData
+>;
+
+export type RentApprovalDto = z.infer<
+  typeof landLordPropertyDtoSchema.rentApprovalData
+>;

@@ -5,22 +5,27 @@ import { Property } from "../../../models/property.model";
 import {
   CreatePropertyDto,
   GetPropertyQueryDto,
+  MeetingApprovalDto,
+  RentApprovalDto,
 } from "./landlord.property.dto";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { UpdateLandlordDto } from "../account/landlord.account.dto";
+import { Wishlist } from "../../../models/wishlist.model";
 
 const createLandlordPropertyInDB = async (
   userId: string,
   payload: CreatePropertyDto
 ) => {
   const user = await Landlord.findById(userId);
-  if (!userId) {
+  console.log(userId, user);
+  if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found.");
   }
 
+  console.log(payload);
   const newProperty = await Property.create({
     ...payload,
-    owner: user?.id,
+    owner: user._id,
   });
 
   return newProperty;
@@ -69,6 +74,113 @@ const getLandLordPropertiesFromDB = async (
   return await properties.exec();
 };
 
+const geSingletLandLordPropertiesFromDB = async (
+  userId: string,
+  id: string
+) => {
+  const user = await Landlord.findById(userId);
+  if (!userId) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  }
+
+  // Perform the query
+  let property = await Property.find({
+    _id: new Types.ObjectId(id),
+    owner: new Types.ObjectId(userId),
+  });
+  const wishes = await Wishlist.find({
+    propertyId: new Types.ObjectId(id),
+  }).populate({
+    path: "userId",
+    select: "name email nid image phone whatsapp nationality",
+  });
+  return {
+    property,
+    wishes,
+  };
+};
+
+const approveScheduleFromDB = async (
+  userId: string,
+  id: string,
+  payload: MeetingApprovalDto
+) => {
+  const user = await Landlord.findById(userId);
+  if (!userId) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  }
+
+  const wish = await Wishlist.findById(id).populate({
+    path: "propertyId",
+    select: "owner",
+  });
+
+  if (!wish) {
+    throw new AppError(httpStatus.NOT_FOUND, "Wish not found.");
+  }
+
+  const property = await Property.findById(wish.propertyId.toString());
+
+  if (!property || property.owner.toString() !== userId) {
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found.");
+  }
+
+  if (!wish.meetingDate) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Meeting schedule not set yet.");
+  }
+
+  if (
+    wish?.meetingApproval === "accepted" ||
+    wish?.meetingApproval === "rejected"
+  ) {
+    throw new AppError(httpStatus.CONFLICT, `Already ${wish.meetingApproval}`);
+  }
+
+  const result = await Wishlist.findByIdAndUpdate(id, payload, { new: true });
+
+  return result;
+};
+
+const approveRentFromDB = async (
+  userId: string,
+  id: string,
+  payload: RentApprovalDto
+) => {
+  const user = await Landlord.findById(userId);
+  if (!userId) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  }
+
+  const wish = await Wishlist.findById(id);
+
+  if (!wish) {
+    throw new AppError(httpStatus.NOT_FOUND, "Wish not found.");
+  }
+
+  console.log("*******************************************");
+  console.log(wish.propertyId.toString());
+
+  const property = await Property.findById(wish.propertyId.toString());
+  if (!property || property.owner.toString() !== userId) {
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found.");
+  }
+
+  if (property.propertyStatus === "Rented") {
+    throw new AppError(httpStatus.CONFLICT, "Already rented.");
+  }
+  if (payload.status === "accepted") {
+    wish.status = payload.status;
+    property.propertyStatus = "Rented";
+    await wish.save();
+    await property.save();
+  } else {
+    wish.status = payload.status;
+    await wish.save();
+  }
+
+  return { wish, property };
+};
+
 const updateLandlordPropertyInDB = async (
   userId: string,
   propertyId: string,
@@ -104,4 +216,7 @@ export const landlordPropertyServices = {
   createLandlordPropertyInDB,
   getLandLordPropertiesFromDB,
   updateLandlordPropertyInDB,
+  geSingletLandLordPropertiesFromDB,
+  approveScheduleFromDB,
+  approveRentFromDB,
 };

@@ -90,9 +90,25 @@ const updateLandlord = catchAsync(async (req, res) => {
     .json(resBuild(httpStatus.OK, "Land lord account updated", result));
 });
 
+const getLandlordAccount = catchAsync(async (req, res) => {
+  if (!req.decoded) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized access.");
+  }
+  const { userId } = req.decoded;
+
+  const result = await landlordAccountServices.getLandlordAccountFromDB(userId);
+
+  return res
+    .status(httpStatus.OK)
+    .json(resBuild(httpStatus.OK, "Landlord account retrieved.", result));
+});
+
+
+
 export const landlordAccountController = {
   createLandLordAccount,
   loginLandLordAccount,
   verifyLandlord,
   updateLandlord,
+  getLandlordAccount,
 };

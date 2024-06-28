@@ -7,6 +7,12 @@ import verifiedOnly from "../../../middlewares/verifiedOnly";
 
 const landlordAccountRouter = express.Router();
 
+landlordAccountRouter.get(
+  "/",
+  authorize("landLord"),
+  landlordAccountController.getLandlordAccount
+);
+
 landlordAccountRouter.post(
   "/create",
   validateRequest(landlordAccountValidation.createLandlordSchema),
