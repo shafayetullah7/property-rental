@@ -31,7 +31,7 @@ const registerNewUserInDB = async (payload: RegisterUserDto) => {
     verified: newUser.verified,
   });
 
-  return { token, user: newUser };
+  return { token, user: newUser, role: "user" };
 };
 
 const loginUserInDB = async (payload: LoginUserDto) => {
@@ -56,7 +56,7 @@ const loginUserInDB = async (payload: LoginUserDto) => {
     verified: user.verified,
   });
 
-  return { token, user };
+  return { token, user, role: "user" };
 };
 
 const verifyUserInDB = async (id: string, payload: VerifyUserDto) => {

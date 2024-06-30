@@ -35,7 +35,7 @@ const createLandLordAccountInDB = async (payload: CreateLandlordDto) => {
     role: "landLord",
     verified: false,
   });
-  return { token, account: newAccount };
+  return { token, account: newAccount, role: "landlord" };
 };
 
 const loginLandlordInSystem = async (payload: LoginLandlordDto) => {
@@ -61,7 +61,7 @@ const loginLandlordInSystem = async (payload: LoginLandlordDto) => {
     role: "landLord",
     verified: false,
   });
-  return { token, account: existingAccount };
+  return { token, account: existingAccount, role: "landlord" };
 };
 
 const verifyLandlordInDB = async (

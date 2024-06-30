@@ -37,7 +37,7 @@ const createAdminInDB = async (payload: CreateAdminDto) => {
       "Failed to create admin."
     );
   }
-  return { token, account: admin };
+  return { token, account: admin, role: "admin" };
 };
 
 const loginAdminInDB = async (payload: LoginAdminDto) => {
@@ -68,7 +68,7 @@ const loginAdminInDB = async (payload: LoginAdminDto) => {
       "Failed to login admin."
     );
   }
-  return { token, account: admin };
+  return { token, account: admin, role: "admin" };
 };
 
 const getAdminAccount = async (userId: string) => {
