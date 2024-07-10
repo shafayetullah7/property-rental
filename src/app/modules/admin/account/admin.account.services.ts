@@ -25,7 +25,7 @@ const createAdminInDB = async (payload: CreateAdminDto) => {
   const admin = await Admin.create(payload);
 
   const token = createJwtToken({
-    userId: admin._id,
+    userId: admin._id as string, 
     email: admin.email,
     role: "admin",
     verified: true,
@@ -56,7 +56,7 @@ const loginAdminInDB = async (payload: LoginAdminDto) => {
   }
 
   const token = createJwtToken({
-    userId: admin._id,
+    userId: admin._id as string,
     email: admin.email,
     role: "admin",
     verified: true,

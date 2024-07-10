@@ -25,7 +25,7 @@ const registerNewUserInDB = async (payload: RegisterUserDto) => {
   const newUser = await User.create(payload);
 
   const token = createJwtToken({
-    userId: newUser._id.toString(),
+    userId: newUser._id as string,
     email: newUser.email,
     role: "user",
     verified: newUser.verified,
@@ -50,7 +50,7 @@ const loginUserInDB = async (payload: LoginUserDto) => {
   }
 
   const token = createJwtToken({
-    userId: user._id.toString(),
+    userId: user._id as string,
     email: user.email,
     role: "user",
     verified: user.verified,

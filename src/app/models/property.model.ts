@@ -5,8 +5,6 @@ interface IProperty extends Document {
   _id: Types.ObjectId;
   propertyName: string;
   propertyPrice: number;
-  propertyUploadingDate: Date;
-  lastStatusUpdatingDate: Date;
   propertyStatus: "Available" | "Rented";
   propertyType: "Flat" | "House";
   propertyID: string;
@@ -38,16 +36,6 @@ const propertySchema = new Schema<IProperty>(
     },
     propertyPrice: {
       type: Number,
-      required: true,
-      default: null,
-    },
-    propertyUploadingDate: {
-      type: Date,
-      required: true,
-      default: null,
-    },
-    lastStatusUpdatingDate: {
-      type: Date,
       required: true,
       default: null,
     },

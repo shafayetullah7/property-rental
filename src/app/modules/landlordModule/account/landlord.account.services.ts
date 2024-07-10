@@ -30,7 +30,7 @@ const createLandLordAccountInDB = async (payload: CreateLandlordDto) => {
   }
 
   const token = createJwtToken({
-    userId: newAccount._id,
+    userId: newAccount._id as string,
     email: newAccount.email,
     role: "landLord",
     verified: false,
@@ -56,7 +56,7 @@ const loginLandlordInSystem = async (payload: LoginLandlordDto) => {
   // hello
 
   const token = createJwtToken({
-    userId: existingAccount._id,
+    userId: existingAccount._id as string,
     email: existingAccount.email,
     role: "landLord",
     verified: false,

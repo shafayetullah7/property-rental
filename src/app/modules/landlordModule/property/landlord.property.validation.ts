@@ -1,12 +1,9 @@
 import { query } from "express";
-import { Types } from "mongoose";
 import { z } from "zod";
 
 const createPropertyData = z.object({
   propertyName: z.string(),
   propertyPrice: z.number(),
-  propertyUploadingDate: z.string().datetime(),
-  lastStatusUpdatingDate: z.string().datetime(),
   propertyStatus: z.enum(["Available", "Rented"]),
   propertyType: z.enum(["Flat", "House"]),
   propertyID: z.string(),
@@ -28,8 +25,6 @@ const updatePropertyData = z
   .object({
     propertyName: z.string(),
     propertyPrice: z.number(),
-    propertyUploadingDate: z.string().datetime(),
-    lastStatusUpdatingDate: z.string().datetime(),
     propertyStatus: z.enum(["Available", "Rented"]),
     propertyType: z.enum(["Flat", "House"]),
     propertyID: z.string(),
