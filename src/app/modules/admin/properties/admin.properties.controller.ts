@@ -58,8 +58,27 @@ const verifyProperty = catchAsync(async (req, res) => {
     .json(resBuild(httpStatus.OK, "Property verified.", result));
 });
 
+const deleteProperty = catchAsync(async (req, res) => {
+  const { userId } = req.decoded;
+
+  if (!userId) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized access");
+  }
+
+  const { propertyId } = req.params;
+
+  console.log(propertyId);
+
+  const result = await adminPropertiesServices.deletePropertyInDB(propertyId);
+
+  return res
+    .status(httpStatus.OK)
+    .json(resBuild(httpStatus.OK, "Property deleted.", result));
+});
+
 export const adminPropertiesController = {
   getAllProperties,
   getSingleProperty,
   verifyProperty,
+  deleteProperty,
 };

@@ -34,10 +34,17 @@ const getAllPropertyQuerySchema = z.object({
   query: getAllPropertyQuery,
 });
 
+const deletePropertySchema = z.object({
+  params: z.object({
+    propertyId: z.string(),
+  }),
+});
+
 export const AdminPropertiesDtoSchema = {
   getAllPropertyQuery,
 };
 
 export const adminPropertiesValidation = {
   getAllPropertyQuerySchema,
+  deletePropertySchema,
 };

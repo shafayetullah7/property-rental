@@ -7,7 +7,11 @@ import { Property } from "../../../models/property.model";
 import { Schema, Types } from "mongoose";
 
 const getPropertiesFromDB = async (query: GetPropertiesQuery) => {
-  let properties = await Property.find(query).populate({
+  const queryObj: any = { ...query };
+  if (queryObj.propertyName) {
+    queryObj.propertyName = new RegExp(queryObj.propertyName, "i");
+  }
+  let properties = await Property.find(queryObj).populate({
     path: "owner",
     select: "name email profileImage mobileNumber whatsAppNumber officeNumber",
   });

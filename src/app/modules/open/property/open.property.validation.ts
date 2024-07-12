@@ -6,6 +6,7 @@ const getProperiesQuery = z
     id: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
       message: "Invalid id. It must be a valid ObjectId.",
     }),
+    propertyName: z.string(),
   })
   .partial();
 const getPropertiesSchema = z.object({

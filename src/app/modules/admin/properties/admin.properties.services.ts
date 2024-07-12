@@ -73,8 +73,21 @@ const verifyPropertyInDB = async (propertyId: string) => {
   return property;
 };
 
+const deletePropertyInDB = async (propertyId: string) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found.");
+  }
+
+  const deleteResult = await Property.findByIdAndDelete(propertyId);
+
+  return deleteResult;
+};
+
 export const adminPropertiesServices = {
   getPropertiesFromDB,
   getSinglePropertyFromDB,
   verifyPropertyInDB,
+  deletePropertyInDB,
 };

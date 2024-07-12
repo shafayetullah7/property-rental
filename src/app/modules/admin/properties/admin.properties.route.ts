@@ -19,6 +19,12 @@ adminPropertiesRouter.get(
   adminPropertiesController.getSingleProperty
 );
 
+adminPropertiesRouter.delete(
+  "/:propertyId",
+  authorize("admin"),
+  adminPropertiesController.deleteProperty
+);
+
 adminPropertiesRouter.patch(
   "/:propertyId/verify",
   authorize("admin"),
